@@ -3,32 +3,41 @@ $(document).ready(function() {
 
     var columnDefs = [
         {
-        data: "NewsID",
-        title: "News ID",
+        data: "JobID",
+        title: "Job ID",
         type: "num",
         disabled: true
         },
         {
-        data: "Headline",
-        title: "Headline",
+        data: "JobHeadline",
+        title: "Job Headline",
         required: true,
         maxLength: 100
         },
         {
-        data: "NewsPreviewText",
-        title: "News Preview Text",
+        data: "JobSalaryLow",
+        title: "Job Salary Low Range",
+        required: true,
+        type: "num",
+        pattern: "^[0-9]+$"
+        },
+        {
+        data: "JobSalaryHigh",
+        title: "Job Salary High Range",
+        required: true,
+        type: "num",
+        pattern: "^[0-9]+$"
+        },
+        {
+        data: "JobDescText",
+        title: "Job Description Text",
         required: true,
         type: "textarea"
         },
+
         {
-        data: "NewsBodyText",
-        title: "News Body Text",
-        required: true,
-        type: "textarea"
-        },
-        {
-        data: "NewsDate",
-        title: "News Date",
+        data: "JobDatePosting",
+        title: "Job Date Posting",
         type: "date",
         dateFormat : "MM/DD/YYYY", 
         placeholder: "MM/DD/YYYY",
@@ -40,8 +49,8 @@ $(document).ready(function() {
 
         },
         {
-        data: "HeadlineImg",
-        title: "Headline Image Link",
+        data: "JobImg",
+        title: "Job Image Link",
         required: true,
         render: function(data, type, row, meta) {
             if (data) return `<img style='max-width:300px;max-height:300px' src='${data}'></img> or <button onclick='window.open("${data}")'>Download</button>`;
@@ -63,16 +72,16 @@ $(document).ready(function() {
 
     var myTable;
 
-    var url_get_all_news = 'http://localhost:3000/api/newsadmin';
-    var url_add_update_delete_news = 'http://localhost:3000/api/news/';
+    var url_get_all = 'http://localhost:3000/api/jobopeningsadmin';
+    var url_add_update_delete = 'http://localhost:3000/api/jobopenings/';
 
 
 
 
-    myTable = $('#newseditor').DataTable({
+    myTable = $('#jobseditor').DataTable({
         "sPaginationType": "full_numbers",
         ajax: {
-            url : url_get_all_news,
+            url : url_get_all,
             // our data is an array of objects, in the root node instead of /data node, so we need 'dataSrc' parameter
             dataSrc : ''
         },
@@ -105,7 +114,7 @@ $(document).ready(function() {
         onAddRow: function(datatable, rowdata, success, error) {
             $.ajax({
                 // a tipycal url would be / with type='POST'
-                url: url_add_update_delete_news,
+                url: url_add_update_delete,
                 type: 'POST',
                 data: rowdata,
                 success: success,
@@ -115,7 +124,7 @@ $(document).ready(function() {
         onDeleteRow: function(datatable, rowdata, success, error) {
             $.ajax({
                 // a tipycal url would be /{id} with type='DELETE'
-                url: url_add_update_delete_news + rowdata.NewsID,
+                url: url_add_update_delete + rowdata.JobID,
                 type: 'DELETE',
                 data: rowdata,
                 success: success,
@@ -125,7 +134,7 @@ $(document).ready(function() {
         onEditRow: function(datatable, rowdata, success, error) {
             $.ajax({
                 // a tipycal url would be /{id} with type='PUT'
-                url: url_add_update_delete_news + rowdata.NewsID,
+                url: url_add_update_delete + rowdata.JobID,
                 type: 'PUT',
                 data: rowdata,
                 success: success,
